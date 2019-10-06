@@ -2,9 +2,11 @@ package mqtt.adapter;
 
 import lombok.extern.slf4j.Slf4j;
 import mqtt.adapter.data.AdapterStorage;
+import org.apache.commons.lang3.SerializationUtils;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import pi.tracker.dto.PiSensorHubMetric;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -27,9 +29,10 @@ public class MqttAdapterCallback implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        String payload = new String(message.getPayload());
-        log.debug("Received message on topic: {} with payload: {}. Storing...", topic, payload);
-        storage.store(topic, payload);
+        log.debug("MQTT Message arrived, topic = {}", topic);
+        PiSensorHubMetric metric = SerializationUtils.deserialize(message.getPayload());
+        log.debug("Received message on topic: {} with payload: {}. Storing...", topic, metric);
+        storage.store(topic, metric);
     }
 
     @Override

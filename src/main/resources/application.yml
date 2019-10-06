@@ -8,10 +8,4 @@ mqtt-adapter:
     address: 127.0.0.1
     port: 1883
   topics:
-    - temperature
-    - light
-    - human
-    - air-pressure-temperature
-    - air-pressure
-    - on-board-humidity
-    - on-board-temperature
+    - pi-sensor-hub

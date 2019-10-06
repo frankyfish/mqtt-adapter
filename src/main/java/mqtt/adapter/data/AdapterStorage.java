@@ -1,6 +1,7 @@
 package mqtt.adapter.data;
 
-public interface AdapterStorage {
-    void store(String topicName, String data);
-    String getLastMessage(String topic);
+public interface AdapterStorage<T extends Object> {
+    void store(String topicName, T data);
+    T getLastMessage(String topic);
+    boolean contains(String topic);
 }

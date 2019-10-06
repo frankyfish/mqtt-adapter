@@ -2,9 +2,9 @@ package mqtt.adapter;
 
 import io.micronaut.runtime.Micronaut;
 
-public class Application {
+public class MqttAdapterApplication {
 
     public static void main(String[] args) {
-        Micronaut.run(Application.class);
+        Micronaut.run(MqttAdapterApplication.class);
     }
 }
