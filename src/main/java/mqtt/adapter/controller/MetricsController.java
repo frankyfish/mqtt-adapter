@@ -1,5 +1,6 @@
 package mqtt.adapter.controller;
 
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
@@ -22,9 +23,11 @@ public class MetricsController {
     }
 
     @Get(value = "/{topic}", produces = MediaType.APPLICATION_JSON)
-    public PiSensorHubMetric getMetric(@PathVariable("topic") String topic) {
+    public HttpResponse<PiSensorHubMetric> getMetric(@PathVariable("topic") String topic) {
         log.debug("Got request for message with topic = {}", topic);
-        return metricsService.find(topic);
+        PiSensorHubMetric storedMetric = metricsService.find(topic);
+        log.debug("Returning metric: {}", storedMetric);
+        return HttpResponse.ok(storedMetric);
     }
 
 }

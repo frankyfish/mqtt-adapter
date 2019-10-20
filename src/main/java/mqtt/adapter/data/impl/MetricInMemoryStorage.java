@@ -22,10 +22,10 @@ public class MetricInMemoryStorage implements AdapterStorage {
             storage.put(topicName, (PiSensorHubMetric) data);
         }
     }
-    // todo impementations for these
+
     @Override
     public PiSensorHubMetric getLastMessage(String topic) {
-        return null;
+        return storage.get(topic);
     }
 
     @Override
