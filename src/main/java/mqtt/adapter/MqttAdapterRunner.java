@@ -11,6 +11,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
 
+/**
+ * This class works as a main entry-point for the program.
+ * Key method is {@link #run(ServiceStartedEvent)}
+ */
+
 @Slf4j
 @Singleton
 public class MqttAdapterRunner {
@@ -25,26 +30,26 @@ public class MqttAdapterRunner {
         this.mqttClient = mqttClient;
     }
 
+    /**
+     * This method works as an entry-point by listening for Micronaut's {@link ServiceStartedEvent}
+     * After event is caught attempt to establish MQTT connection to broker is made.
+     *
+     * @param serviceStartedEvent event produced by Micronaut on service start-up
+     * @throws MqttException in case of failed attempt to connect
+     */
     @EventListener
-    public void run(final ServiceStartedEvent serviceStartedEvent) {
-        try {
-            mqttClient.connect();
-            if (mqttClient.isConnected()) {
-                subscribeOnTopics();
-            } else {
-                throw new RuntimeException("Failed to establish MQTT Connection");
-            }
-        } catch (MqttException e) {
-            log.error("Failed to establish connection with MQTT Broker", e);
-            throw new RuntimeException(e);
+    public void run(final ServiceStartedEvent serviceStartedEvent) throws MqttException {
+        mqttClient.connect();
+        if (mqttClient.isConnected()) {
+            subscribeOnTopics();
         }
     }
 
     private void subscribeOnTopics() throws MqttException {
         if (mqttTopics != null
-                &&!mqttTopics.isEmpty()) {
-            for (String topic: mqttTopics) {
-                mqttClient.subscribe(topic, 0); // todo: make qos configurable
+                && !mqttTopics.isEmpty()) {
+            for (String topic : mqttTopics) {
+                mqttClient.subscribe(topic, 0); // todo: make qos configurable (Map?)
             }
         }
     }
